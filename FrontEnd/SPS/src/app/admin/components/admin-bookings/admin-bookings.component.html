@@ -1,0 +1,91 @@
+<div class="sps-page">
+
+  <div class="sps-page-header d-flex align-items-center justify-content-between">
+    <div>
+      <h4><i class="bi bi-list-check me-2 text-primary-sps"></i>All Bookings</h4>
+      <p>{{ bookings.length }} booking(s) shown</p>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="sps-tabs">
+    <button class="sps-tab" *ngFor="let tab of tabs"
+      [class.active]="activeTab === tab" (click)="loadTab(tab)">
+      <span class="status-dot"
+        [class.active]="tab==='ACTIVE'"
+        [class.completed]="tab==='COMPLETED'"
+        [class.cancelled]="tab==='CANCELLED'"
+        *ngIf="tab !== 'ALL'"></span>
+      {{ tab }}
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="sps-spinner"><div class="spinner-border"></div><span>Loading…</span></div>
+  <div *ngIf="errorMsg" class="alert alert-danger rounded-3">{{ errorMsg }}</div>
+
+  <div class="sps-card" *ngIf="!loading">
+    <div class="table-responsive">
+      <table class="sps-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>User</th>
+            <th>Vehicle</th>
+            <th>Slot</th>
+            <th>Building</th>
+            <th>Start</th>
+            <th>End / Cancelled At</th>
+            <th>Duration</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let b of bookings">
+            <td><span class="fw-700 text-muted small">#{{ b.id }}</span></td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <div class="u-avatar" style="width:30px;height:30px;font-size:.72rem">
+                  {{ (getUserName(b.userId) ?? 'U')[0].toUpperCase() }}
+                </div>
+                <div>
+                  <div class="fw-600 small">{{ getUserName(b.userId) }}</div>
+                  <div class="text-muted" style="font-size:.72rem">#{{ b.userId }}</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="sps-badge info">Vehicle #{{ b.vehicleId }}</span></td>
+            <td><span class="sps-badge info">Slot #{{ b.slotId }}</span></td>
+            <td>
+              <div class="fw-600 small">{{ getBuildingName(b.buildingId) }}</div>
+              <div class="text-muted" style="font-size:.72rem">{{ getBuildingCity(b.buildingId) }}</div>
+            </td>
+            <td class="small text-muted">{{ safeDate(b.startTime) | date:'dd MMM yy, HH:mm' }}</td>
+            <td class="small text-muted">{{ safeDate(b.endTime) ? (safeDate(b.endTime) | date:'dd MMM yy, HH:mm') : '—' }}</td>
+            <td><span class="sps-badge info">{{ getDuration(b.startTime, b.endTime) }}</span></td>
+            <td>
+              <span class="sps-badge"
+                [class.active]="b.status==='ACTIVE'"
+                [class.completed]="b.status==='COMPLETED'"
+                [class.cancelled]="b.status==='CANCELLED'">
+                <span class="status-dot"
+                  [class.active]="b.status==='ACTIVE'"
+                  [class.completed]="b.status==='COMPLETED'"
+                  [class.cancelled]="b.status==='CANCELLED'"></span>
+                {{ b.status }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="bookings.length === 0">
+            <td colspan="9" class="text-center py-5">
+              <div class="empty-state" style="padding:2rem">
+                <i class="bi bi-inbox"></i>
+                <p>No bookings found.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,127 @@
+﻿<div class="sps-page">
+
+  <div class="sps-page-header d-flex align-items-center justify-content-between">
+    <div>
+      <h4><i class="bi bi-calendar2-check-fill me-2 text-primary-sps"></i>My Bookings</h4>
+      <p>Track and manage your parking sessions</p>
+    </div>
+    <a routerLink="/bookings/new" class="sps-btn sps-btn-primary">
+      <i class="bi bi-plus-lg"></i>New Booking
+    </a>
+  </div>
+
+  <div *ngIf="errorMsg" class="alert alert-danger rounded-3 mb-4">{{ errorMsg }}</div>
+  <div *ngIf="loading" class="sps-spinner"><div class="spinner-border"></div><span>Loading bookingsâ€¦</span></div>
+
+  <ng-container *ngIf="!loading">
+
+    <!-- Tabs -->
+    <div class="sps-tabs">
+      <button class="sps-tab" [class.active]="activeTab==='ACTIVE'" (click)="activeTab='ACTIVE'">
+        <span class="status-dot active"></span> Active
+        <span class="tab-count">{{ activeBookings.length }}</span>
+      </button>
+      <button class="sps-tab" [class.active]="activeTab==='COMPLETED'" (click)="activeTab='COMPLETED'">
+        <i class="bi bi-check-circle"></i> History
+        <span class="tab-count">{{ completedBookings.length }}</span>
+      </button>
+    </div>
+
+    <!-- Active Bookings -->
+    <ng-container *ngIf="activeTab==='ACTIVE'">
+      <div *ngIf="activeBookings.length === 0" class="empty-state sps-card py-5">
+        <i class="bi bi-calendar-x"></i>
+        <p>No active bookings right now.</p>
+        <a routerLink="/bookings/new" class="sps-btn sps-btn-primary mt-3">Book a Slot</a>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-4" *ngFor="let b of activeBookings">
+          <div class="booking-card">
+            <div class="bc-accent"></div>
+            <div class="bc-body">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <span class="sps-badge active"><span class="status-dot active"></span>Active</span>
+                <span class="text-muted" style="font-size:.75rem">Booking #{{ b.id }}</span>
+              </div>
+              <div class="d-flex flex-column gap-2">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="stat-icon blue" style="width:32px;height:32px;border-radius:8px;font-size:.9rem;flex-shrink:0">
+                    <i class="bi bi-buildings"></i>
+                  </div>
+                  <div>
+                    <div style="font-size:.7rem;color:var(--sps-muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Building</div>
+                    <div class="fw-700" style="font-size:.9rem">{{ getBuildingName(b.buildingId) }}</div>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="stat-icon green" style="width:32px;height:32px;border-radius:8px;font-size:.9rem;flex-shrink:0">
+                    <i class="bi bi-grid-3x3-gap"></i>
+                  </div>
+                  <div>
+                    <div style="font-size:.7rem;color:var(--sps-muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Slot</div>
+                    <div class="fw-700" style="font-size:.9rem">{{ b.slot?.slotNumber ?? ('#' + b.slotId) }}</div>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="stat-icon amber" style="width:32px;height:32px;border-radius:8px;font-size:.9rem;flex-shrink:0">
+                    <i class="bi bi-clock"></i>
+                  </div>
+                  <div>
+                    <div style="font-size:.7rem;color:var(--sps-muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Started</div>
+                    <div class="fw-600" style="font-size:.85rem">{{ safeDate(b.startTime) | date:'dd MMM yy, HH:mm' }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bc-footer">
+              <button class="sps-btn sps-btn-success sps-btn-sm flex-fill justify-content-center" (click)="complete(b.id!)">
+                <i class="bi bi-check-circle"></i>Complete
+              </button>
+              <button class="sps-btn sps-btn-danger sps-btn-sm flex-fill justify-content-center" (click)="cancel(b.id!)">
+                <i class="bi bi-x-circle"></i>Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- History -->
+    <ng-container *ngIf="activeTab==='COMPLETED'">
+      <div *ngIf="completedBookings.length === 0" class="empty-state sps-card">
+        <i class="bi bi-check-circle"></i>
+        <p>No completed bookings yet.</p>
+      </div>
+      <div class="sps-card" *ngIf="completedBookings.length > 0">
+        <div class="table-responsive">
+          <table class="sps-table">
+            <thead>
+              <tr><th>#</th><th>Building</th><th>Slot</th><th>Start</th><th>End / Cancelled At</th><th>Duration</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let b of completedBookings">
+                <td><span class="fw-700 text-muted small">#{{ b.id }}</span></td>
+                <td class="fw-600 small">{{ getBuildingName(b.buildingId) }}</td>
+                <td><span class="sps-badge info">{{ b.slot?.slotNumber ?? ('#' + b.slotId) }}</span></td>
+                <td class="small text-muted">{{ safeDate(b.startTime) | date:'dd MMM yy, HH:mm' }}</td>
+                <td class="small text-muted">{{ safeDate(b.endTime) ? (safeDate(b.endTime) | date:'dd MMM yy, HH:mm') : 'â€”' }}</td>
+                <td>
+                  <span class="sps-badge info">{{ getDuration(b.startTime, b.endTime) }}</span>
+                </td>
+                <td>
+                  <span class="sps-badge"
+                    [class.completed]="b.status==='COMPLETED'"
+                    [class.cancelled]="b.status==='CANCELLED'">
+                    {{ b.status }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-container>
+
+  </ng-container>
+</div>
+

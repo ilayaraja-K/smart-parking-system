@@ -1,0 +1,77 @@
+<div class="auth-shell">
+
+  <!-- Left panel -->
+  <div class="auth-left">
+    <div class="brand-icon mb-4" style="width:52px;height:52px;border-radius:14px;font-size:1.5rem">
+      <i class="bi bi-p-fill"></i>
+    </div>
+    <h1>Smart Parking<br>System</h1>
+    <p>Manage your parking intelligently.<br>Book slots, track vehicles, stay in control.</p>
+    <div class="auth-features">
+      <div class="auth-feature"><i class="bi bi-check-circle-fill"></i>Real-time slot availability</div>
+      <div class="auth-feature"><i class="bi bi-check-circle-fill"></i>Multi-building support</div>
+      <div class="auth-feature"><i class="bi bi-check-circle-fill"></i>Vehicle-type smart matching</div>
+      <div class="auth-feature"><i class="bi bi-check-circle-fill"></i>Full booking history & analytics</div>
+    </div>
+  </div>
+
+  <!-- Right: form -->
+  <div class="auth-right">
+    <div class="auth-form-wrap">
+
+      <div class="mb-4">
+        <h3 class="fw-800 mb-1" style="font-size:1.5rem;font-weight:800">Welcome back</h3>
+        <p class="text-muted small mb-0">Sign in to your SmartPark account</p>
+      </div>
+
+      <div *ngIf="errorMsg" class="d-flex align-items-center gap-2 p-3 rounded-3 mb-3"
+           style="background:#fee2e2;color:#b91c1c;font-size:.875rem">
+        <i class="bi bi-exclamation-circle-fill"></i><span>{{ errorMsg }}</span>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+
+        <div class="mb-3">
+          <label class="sps-label" for="email">Email Address</label>
+          <input id="email" type="email" class="sps-input"
+            [class.is-invalid]="emailCtrl.invalid && emailCtrl.touched"
+            formControlName="email" placeholder="you@example.com" autocomplete="email">
+          <div *ngIf="emailCtrl.invalid && emailCtrl.touched" class="mt-1" style="font-size:.78rem;color:var(--sps-danger)">
+            {{ emailCtrl.hasError('required') ? 'Email is required.' : 'Enter a valid email.' }}
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="sps-label" for="password">Password</label>
+          <div class="position-relative">
+            <input id="password" [type]="showPassword ? 'text' : 'password'"
+              class="sps-input" style="padding-right:2.5rem"
+              [class.is-invalid]="passwordCtrl.invalid && passwordCtrl.touched"
+              formControlName="password" placeholder="••••••••" autocomplete="current-password">
+            <button type="button" (click)="showPassword=!showPassword"
+              class="border-0 bg-transparent position-absolute end-0 top-50 translate-middle-y pe-3"
+              style="color:var(--sps-muted)">
+              <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+            </button>
+          </div>
+          <div *ngIf="passwordCtrl.invalid && passwordCtrl.touched" class="mt-1" style="font-size:.78rem;color:var(--sps-danger)">
+            {{ passwordCtrl.hasError('required') ? 'Password is required.' : 'Minimum 6 characters.' }}
+          </div>
+        </div>
+
+        <button type="submit" class="sps-btn sps-btn-primary w-100 justify-content-center py-3"
+          [disabled]="loading" style="font-size:.95rem">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+          {{ loading ? 'Signing in…' : 'Sign In' }}
+        </button>
+
+      </form>
+
+      <p class="text-center mt-4 mb-0" style="font-size:.875rem;color:var(--sps-muted)">
+        Don't have an account?
+        <a routerLink="/auth/register" style="color:var(--sps-primary);font-weight:600;text-decoration:none">Create account</a>
+      </p>
+
+    </div>
+  </div>
+</div>

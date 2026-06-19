@@ -1,0 +1,87 @@
+<div class="container-fluid py-4 px-4">
+
+  <div class="mb-4">
+    <h4 class="fw-bold mb-0"><i class="bi bi-people-fill text-primary me-2"></i>Manage Users</h4>
+    <small class="text-muted">{{ users.length }} registered user(s) — click a row to view their vehicles</small>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+  <div *ngIf="errorMsg" class="alert alert-danger">{{ errorMsg }}</div>
+
+  <div class="card border-0 shadow-sm" *ngIf="!loading">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th style="width:40px"></th>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Vehicles</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let u of users">
+            <!-- User Row -->
+            <tr style="cursor:pointer" (click)="toggleVehicles(u.id)">
+              <td class="text-center">
+                <i class="bi" [class.bi-chevron-down]="expandedUserId === u.id"
+                              [class.bi-chevron-right]="expandedUserId !== u.id"></i>
+              </td>
+              <td class="fw-semibold text-muted">{{ u.id }}</td>
+              <td class="fw-semibold">{{ u.name }}</td>
+              <td class="text-muted small">{{ u.email }}</td>
+              <td><span [class]="roleClass(u.role)">{{ u.role | uppercase }}</span></td>
+              <td>
+                <span class="badge bg-light text-dark border">
+                  <i class="bi bi-car-front me-1"></i>
+                  {{ vehiclesMap[u.id]?.length ?? '?' }}
+                </span>
+              </td>
+            </tr>
+
+            <!-- Expanded Vehicles Row -->
+            <tr *ngIf="expandedUserId === u.id">
+              <td colspan="6" class="p-0 bg-light">
+                <div class="p-3">
+                  <div *ngIf="vehiclesLoading && !vehiclesMap[u.id]" class="text-center py-2">
+                    <div class="spinner-border spinner-border-sm text-primary"></div>
+                    <span class="ms-2 small text-muted">Loading vehicles...</span>
+                  </div>
+                  <div *ngIf="vehiclesMap[u.id]">
+                    <p class="small fw-semibold text-muted mb-2">
+                      <i class="bi bi-car-front text-primary me-1"></i>
+                      Vehicles owned by <strong>{{ u.name }}</strong>
+                    </p>
+                    <div *ngIf="vehiclesMap[u.id].length === 0" class="text-muted small fst-italic">
+                      No vehicles registered.
+                    </div>
+                    <div class="row g-2" *ngIf="vehiclesMap[u.id].length > 0">
+                      <div class="col-auto" *ngFor="let v of vehiclesMap[u.id]">
+                        <div class="card border-0 shadow-sm px-3 py-2 d-flex flex-row align-items-center gap-2">
+                          <i class="fs-5 text-primary"
+                            [class.bi-car-front-fill]="v.vehicleType === 'CAR'"
+                            [class.bi-bicycle]="v.vehicleType === 'BIKE'"></i>
+                          <div>
+                            <div class="fw-bold small">{{ v.vehicleNumber }}</div>
+                            <div class="text-muted" style="font-size:11px">{{ v.model }} · {{ v.vehicleType }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+
+          <tr *ngIf="users.length === 0">
+            <td colspan="6" class="text-center text-muted py-4">No users found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

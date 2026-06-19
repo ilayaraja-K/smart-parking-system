@@ -1,0 +1,27 @@
+# Angular
+FrontEnd/SPS/node_modules/
+FrontEnd/SPS/.angular/
+FrontEnd/SPS/dist/
+
+# Java
+**/target/
+*.class
+
+# IDE
+.vscode/
+**/.settings/
+
+# Eclipse files
+**/.project
+**/.classpath
+**/.factorypath
+
+# Logs
+*.log
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.dbgit rm -r --cached .

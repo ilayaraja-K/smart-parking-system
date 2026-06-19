@@ -1,0 +1,162 @@
+<div class="container py-4" style="max-width: 720px;">
+
+  <!-- Step Indicator -->
+  <div class="d-flex align-items-center mb-4 gap-2">
+    <ng-container *ngFor="let s of [1,2,3,4]; let i = index">
+      <div class="d-flex align-items-center justify-content-center rounded-circle fw-bold"
+        style="width:36px;height:36px;font-size:14px;"
+        [class.bg-primary]="step >= s"
+        [class.text-white]="step >= s"
+        [class.bg-light]="step < s"
+        [class.text-muted]="step < s"
+        [class.border]="step < s">
+        {{ s }}
+      </div>
+      <div *ngIf="i < 3" class="flex-fill border-top" style="height:2px;"
+        [class.border-primary]="step > s"
+        [class.border-secondary]="step <= s"></div>
+    </ng-container>
+  </div>
+  <div class="d-flex justify-content-between mb-4 small text-muted px-1">
+    <span [class.text-primary]="step===1" [class.fw-semibold]="step===1">Building</span>
+    <span [class.text-primary]="step===2" [class.fw-semibold]="step===2">Vehicle</span>
+    <span [class.text-primary]="step===3" [class.fw-semibold]="step===3">Slot</span>
+    <span [class.text-primary]="step===4" [class.fw-semibold]="step===4">Confirm</span>
+  </div>
+
+  <!-- Alerts -->
+  <div *ngIf="errorMsg"   class="alert alert-danger  py-2">{{ errorMsg }}</div>
+  <div *ngIf="successMsg" class="alert alert-success py-2">{{ successMsg }}</div>
+
+  <!-- ── STEP 1: Select Building ─────────────────────── -->
+  <div *ngIf="step === 1">
+    <h5 class="fw-bold mb-3"><i class="bi bi-buildings text-primary me-2"></i>Select Building</h5>
+    <div class="input-group mb-3">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="form-control" placeholder="Search by city..."
+        [formControl]="citySearch" (keyup.enter)="loadBuildings()">
+      <button class="btn btn-primary" (click)="loadBuildings()">Search</button>
+    </div>
+    <div *ngIf="buildingsLoading" class="text-center py-4">
+      <div class="spinner-border text-primary"></div>
+    </div>
+    <div class="row g-3" *ngIf="!buildingsLoading">
+      <div class="col-sm-6" *ngFor="let b of buildings">
+        <div class="card border-0 shadow-sm h-100 cursor-pointer"
+          [class.border-primary]="selectedBuilding?.buildingId === b.buildingId"
+          [class.border-2]="selectedBuilding?.buildingId === b.buildingId"
+          style="cursor:pointer" (click)="selectBuilding(b)">
+          <div class="card-body">
+            <h6 class="fw-bold mb-1"><i class="bi bi-building text-primary me-2"></i>{{ b.name }}</h6>
+            <p class="text-muted small mb-0"><i class="bi bi-geo-alt me-1"></i>{{ b.city }}</p>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="buildings.length === 0" class="text-center text-muted py-4">
+        <i class="bi bi-buildings fs-1"></i><p>No buildings found.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: Select Vehicle ──────────────────────── -->
+  <div *ngIf="step === 2">
+    <h5 class="fw-bold mb-3"><i class="bi bi-car-front text-primary me-2"></i>Select Your Vehicle</h5>
+    <p class="text-muted small mb-3">Building: <strong>{{ selectedBuilding?.name }}</strong></p>
+    <div class="row g-3">
+      <div class="col-sm-6" *ngFor="let v of vehicles">
+        <div class="card border-0 shadow-sm h-100"
+          style="cursor:pointer" (click)="selectVehicle(v)"
+          [class.border-primary]="selectedVehicle?.id === v.id"
+          [class.border-2]="selectedVehicle?.id === v.id">
+          <div class="card-body d-flex align-items-center gap-3">
+            <i class="fs-2 text-primary"
+              [class.bi-car-front-fill]="v.vehicleType==='CAR'"
+              [class.bi-bicycle]="v.vehicleType==='BIKE'"></i>
+            <div>
+              <div class="fw-bold">{{ v.vehicleNumber }}</div>
+              <div class="text-muted small">{{ v.model }} · {{ v.vehicleType }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="vehicles.length === 0" class="text-center text-muted py-4">
+        <i class="bi bi-car-front fs-1"></i>
+        <p>No vehicles found. <a routerLink="/vehicles/add">Add one</a>.</p>
+      </div>
+    </div>
+    <button class="btn btn-outline-secondary mt-3" (click)="goBack()">
+      <i class="bi bi-arrow-left me-1"></i>Back
+    </button>
+  </div>
+
+  <!-- ── STEP 3: Select Slot ─────────────────────────── -->
+  <div *ngIf="step === 3">
+    <h5 class="fw-bold mb-3"><i class="bi bi-grid-3x3-gap text-primary me-2"></i>Select Parking Slot</h5>
+    <p class="text-muted small mb-3">
+      Vehicle: <strong>{{ selectedVehicle?.vehicleNumber }}</strong> &nbsp;|&nbsp;
+      Type: <span class="badge bg-primary">{{ selectedVehicle?.vehicleType }}</span>
+    </p>
+    <div *ngIf="slotsLoading" class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+    <div class="row g-2" *ngIf="!slotsLoading">
+      <div class="col-4 col-sm-3" *ngFor="let s of slots">
+        <div class="card text-center border-0 shadow-sm"
+          style="cursor:pointer"
+          [class.bg-primary]="selectedSlot?.slotId === s.slotId"
+          [class.text-white]="selectedSlot?.slotId === s.slotId"
+          (click)="selectSlot(s)">
+          <div class="card-body py-3">
+            <div class="fw-bold fs-5">{{ s.slotNumber }}</div>
+            <small>{{ s.vehicleType }}</small>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="slots.length === 0" class="text-center text-muted py-4 col-12">
+        <i class="bi bi-slash-circle fs-1"></i>
+        <p>No available slots for {{ selectedVehicle?.vehicleType }}.</p>
+      </div>
+    </div>
+    <button class="btn btn-outline-secondary mt-3" (click)="goBack()">
+      <i class="bi bi-arrow-left me-1"></i>Back
+    </button>
+  </div>
+
+  <!-- ── STEP 4: Confirm ─────────────────────────────── -->
+  <div *ngIf="step === 4">
+    <h5 class="fw-bold mb-3"><i class="bi bi-check2-circle text-success me-2"></i>Confirm Booking</h5>
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-6">
+            <p class="text-muted small mb-1">Building</p>
+            <p class="fw-semibold mb-0">{{ selectedBuilding?.name }}</p>
+          </div>
+          <div class="col-6">
+            <p class="text-muted small mb-1">City</p>
+            <p class="fw-semibold mb-0">{{ selectedBuilding?.city }}</p>
+          </div>
+          <div class="col-6">
+            <p class="text-muted small mb-1">Vehicle</p>
+            <p class="fw-semibold mb-0">{{ selectedVehicle?.vehicleNumber }} ({{ selectedVehicle?.model }})</p>
+          </div>
+          <div class="col-6">
+            <p class="text-muted small mb-1">Slot</p>
+            <p class="fw-semibold mb-0">
+              <span class="badge bg-primary fs-6">{{ selectedSlot?.slotNumber }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-success flex-fill" (click)="confirmBooking()" [disabled]="booking">
+        <span *ngIf="booking" class="spinner-border spinner-border-sm me-2"></span>
+        <i *ngIf="!booking" class="bi bi-check-lg me-2"></i>
+        {{ booking ? 'Booking...' : 'Confirm Booking' }}
+      </button>
+      <button class="btn btn-outline-secondary flex-fill" (click)="goBack()">
+        <i class="bi bi-arrow-left me-1"></i>Back
+      </button>
+    </div>
+  </div>
+
+</div>

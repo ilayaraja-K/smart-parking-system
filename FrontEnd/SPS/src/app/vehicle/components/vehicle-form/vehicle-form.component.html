@@ -1,0 +1,96 @@
+<div class="container py-4" style="max-width: 520px;">
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3 border-bottom">
+      <h5 class="fw-bold mb-0">
+        <i class="bi bi-car-front-fill text-primary me-2"></i>
+        {{ isEdit ? 'Edit Vehicle' : 'Add New Vehicle' }}
+      </h5>
+    </div>
+
+    <div class="card-body p-4">
+
+      <!-- Success -->
+      <div *ngIf="successMsg" class="alert alert-success d-flex align-items-center gap-2 py-2">
+        <i class="bi bi-check-circle-fill"></i> {{ successMsg }}
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="errorMsg" class="alert alert-danger d-flex align-items-center gap-2 py-2">
+        <i class="bi bi-exclamation-triangle-fill"></i> {{ errorMsg }}
+      </div>
+
+      <form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()" novalidate>
+
+        <!-- Vehicle Number -->
+        <div class="mb-3">
+          <label for="vehicleNumber" class="form-label fw-semibold">Vehicle Number</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+            <input
+              id="vehicleNumber"
+              type="text"
+              class="form-control text-uppercase"
+              formControlName="vehicleNumber"
+              placeholder="e.g. TN01AB1234"
+              [class.is-invalid]="vehicleNumberCtrl.invalid && vehicleNumberCtrl.touched">
+            <div class="invalid-feedback">
+              {{
+                vehicleNumberCtrl.hasError('required')
+                  ? 'Vehicle number is required.'
+                  : 'Only letters, numbers and hyphens allowed.'
+              }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Vehicle Type -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Vehicle Type</label>
+          <div class="d-flex gap-3">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="typeCar"
+                formControlName="vehicleType" value="CAR">
+              <label class="form-check-label" for="typeCar">
+                <i class="bi bi-car-front me-1"></i>CAR
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="typeBike"
+                formControlName="vehicleType" value="BIKE">
+              <label class="form-check-label" for="typeBike">
+                <i class="bi bi-bicycle me-1"></i>BIKE
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Model -->
+        <div class="mb-3">
+          <label for="model" class="form-label fw-semibold">Model</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-tag"></i></span>
+            <input
+              id="model"
+              type="text"
+              class="form-control"
+              formControlName="model"
+              placeholder="e.g. Swift, Activa"
+              [class.is-invalid]="modelCtrl.invalid && modelCtrl.touched">
+            <div class="invalid-feedback">Model is required.</div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex gap-2 mt-4">
+          <button type="submit" class="btn btn-primary flex-fill" [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            {{ loading ? 'Saving...' : (isEdit ? 'Update Vehicle' : 'Register Vehicle') }}
+          </button>
+          <a routerLink="/vehicles" class="btn btn-outline-secondary flex-fill">Cancel</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
