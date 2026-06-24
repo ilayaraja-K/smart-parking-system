@@ -10,4 +10,4 @@ RUN ./mvnw clean package -DskipTests
 
 EXPOSE 8091
 
-CMD ["java","-jar","target/parking-service-0.0.1-SNAPSHOT.jar"]
+CMD ["java","-jar","target/parking-0.0.1-SNAPSHOT.jar"]
