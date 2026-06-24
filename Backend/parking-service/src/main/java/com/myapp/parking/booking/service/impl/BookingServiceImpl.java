@@ -19,6 +19,7 @@ import com.myapp.parking.slot.repository.SlotRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Implementation of BookingService
@@ -32,6 +33,9 @@ public class BookingServiceImpl implements BookingService {
     private final JwtUtil jwtUtil;
     private final WebClient webClient;
 
+    @Value("${myapp.service.url}")
+private String myappServiceUrl;
+
     // ================= HELPER METHODS =================
 
     private Long getCurrentUserId() {
@@ -44,7 +48,7 @@ public class BookingServiceImpl implements BookingService {
     protected VehicleResponse validateVehicle(Long vehicleId) {
         try {
             AppResponseWrapper<VehicleResponse> response = webClient.get()
-                    .uri("http://localhost:8090/uvmgmt/vehicles/{id}", vehicleId)
+                    .uri(myappServiceUrl + "/uvmgmt/vehicles/{id}", vehicleId)
                     .header("Authorization", "Bearer " + jwtUtil.getCurrentToken())
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<AppResponseWrapper<VehicleResponse>>() {})
