@@ -150,4 +150,9 @@ public class AuthController {
                 )
         );
     }
+
+    @GetMapping("/ping")
+public String ping() {
+    return "AUTH SERVICE OK";
+}
 }
