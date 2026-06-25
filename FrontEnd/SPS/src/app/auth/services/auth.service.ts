@@ -144,6 +144,10 @@ export class AuthService {
   get isLoggedIn():  boolean         { return !!this._user$.value; }
   get isAdmin():     boolean         { return this._user$.value?.role === 'admin'; }
   getToken():        string | null   { return this._user$.value?.token ?? null; }
+  get displayFirstName(): string {
+  const name = this.currentUser?.name ?? '';
+  return name.split(' ')[0];
+}
 }
 
 export interface LoginRequest  { email: string; password: string; }
