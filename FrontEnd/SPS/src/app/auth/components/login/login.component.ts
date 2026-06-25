@@ -40,7 +40,7 @@ export class LoginComponent {
     this.errorMsg = '';
     const { email, password } = this.loginForm.value;
 
-    // Calls POST http://localhost:8090/uvmgmt/users/login
+    // Calls POST https://myapp-service-s92w.onrender.com/uvmgmt/users/login
     // Stores JWT in localStorage under key 'sps_user'
     this.authService.login(email, password).subscribe({
       next: (user) => {

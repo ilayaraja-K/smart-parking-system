@@ -35,7 +35,7 @@ export class AdminCreateBuildingComponent {
     this.submitting = true;
     this.errorMsg   = '';
     this.cdr.detectChanges();
-    this.http.post<any>('http://localhost:8091/pabsm/buildings', this.form.value).subscribe({
+    this.http.post<any>('https://parking-service-un8u.onrender.com/pabsm/buildings', this.form.value).subscribe({
       next: () => {
         this.successMsg = 'Building created successfully!';
         this.submitting = false;

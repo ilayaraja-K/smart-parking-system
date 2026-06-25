@@ -59,8 +59,8 @@ export class BookingFormComponent implements OnInit {
 
     const city = this.citySearch.value?.trim();
     const url = city
-      ? `http://localhost:8091/pabsm/buildings?city=${encodeURIComponent(city)}`
-      : `http://localhost:8091/pabsm/buildings`;
+      ? `https://parking-service-un8u.onrender.com/pabsm/buildings?city=${encodeURIComponent(city)}`
+      : `https://parking-service-un8u.onrender.com/pabsm/buildings`;
 
     this.http.get<any>(url).subscribe({
       next: (res) => {
@@ -87,7 +87,7 @@ export class BookingFormComponent implements OnInit {
   loadVehicles(): void {
     const userId = this.authService.currentUser?.id ?? 0;
     if (!userId) return;
-    this.http.get<any>(`http://localhost:8090/uvmgmt/vehicles/user/${userId}`).subscribe({
+    this.http.get<any>(`https://myapp-service-s92w.onrender.com/uvmgmt/vehicles/user/${userId}`).subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         this.vehicles = Array.isArray(data) ? data : [];
@@ -115,7 +115,7 @@ export class BookingFormComponent implements OnInit {
     this.errorMsg = '';
     this.cdr.detectChanges();
 
-    const url = `http://localhost:8091/pabsm/slots/building/${buildingId}/available?vehicleType=${vehicleType}`;
+    const url = `https://parking-service-un8u.onrender.com/pabsm/slots/building/${buildingId}/available?vehicleType=${vehicleType}`;
     this.http.get<any>(url).subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
@@ -146,7 +146,7 @@ export class BookingFormComponent implements OnInit {
     const vehicleId = this.selectedVehicle?.id;
     const slotId    = this.selectedSlot?.slotId ?? this.selectedSlot?.id;
 
-    this.http.post<any>(`http://localhost:8091/pabsm/bookings`, { vehicleId, slotId }).subscribe({
+    this.http.post<any>(`https://parking-service-un8u.onrender.com/pabsm/bookings`, { vehicleId, slotId }).subscribe({
       next: () => {
         this.booking    = false;
         this.successMsg = 'Booking confirmed successfully!';

@@ -32,7 +32,7 @@ export class BuildingListComponent implements OnInit {
     this.errorMsg = '';
     this.cdr.detectChanges();
 
-    let url = 'http://localhost:8091/pabsm/buildings';
+    let url = 'https://parking-service-un8u.onrender.com/pabsm/buildings';
     const city = this.searchCtrl.value?.trim();
     if (city) url += `?city=${encodeURIComponent(city)}`;
 

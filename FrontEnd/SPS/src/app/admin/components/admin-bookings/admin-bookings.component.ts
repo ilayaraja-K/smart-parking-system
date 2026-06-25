@@ -25,7 +25,7 @@ export class AdminBookingsComponent implements OnInit {
 
   ngOnInit(): void {
     // Load buildings for name lookup
-    this.http.get<any>('http://localhost:8091/pabsm/buildings').subscribe({
+    this.http.get<any>('https://parking-service-un8u.onrender.com/pabsm/buildings').subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         this.buildings = Array.isArray(data) ? data : [];
@@ -33,7 +33,7 @@ export class AdminBookingsComponent implements OnInit {
       }
     });
     // Load users for name lookup
-    this.http.get<any>('http://localhost:8090/uvmgmt/users').subscribe({
+    this.http.get<any>('https://myapp-service-s92w.onrender.com/uvmgmt/users').subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         this.users = Array.isArray(data) ? data : [];
@@ -51,8 +51,8 @@ export class AdminBookingsComponent implements OnInit {
     this.cdr.detectChanges();
 
     const url = tab === 'ALL'
-      ? 'http://localhost:8091/pabsm/bookings'
-      : `http://localhost:8091/pabsm/bookings/status/${tab}`;
+      ? 'https://parking-service-un8u.onrender.com/pabsm/bookings'
+      : `https://parking-service-un8u.onrender.com/pabsm/bookings/status/${tab}`;
 
     this.http.get<any>(url).subscribe({
       next: (res) => {

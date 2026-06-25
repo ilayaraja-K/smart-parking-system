@@ -82,7 +82,7 @@ export class ProfileComponent implements OnInit {
     if (!user) { this.errorMsg = 'Not authenticated.'; this.loading = false; return; }
     this.userId = user.id;
 
-    this.http.get<any>(`http://localhost:8090/uvmgmt/users/${this.userId}`).subscribe({
+    this.http.get<any>(`https://myapp-service-s92w.onrender.com/uvmgmt/users/${this.userId}`).subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         this.form.name  = data?.name  ?? user.name;
@@ -110,7 +110,7 @@ export class ProfileComponent implements OnInit {
       body.password = this.form.password.trim();
     }
 
-    this.http.put<any>(`http://localhost:8090/uvmgmt/users/${this.userId}`, body).subscribe({
+    this.http.put<any>(`https://myapp-service-s92w.onrender.com/uvmgmt/users/${this.userId}`, body).subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         // refresh stored auth user with new name/email

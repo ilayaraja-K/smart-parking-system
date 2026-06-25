@@ -39,7 +39,7 @@ export class VehicleListComponent implements OnInit {
     this.errorMsg = '';
     this.cdr.detectChanges();
 
-    this.http.get<any>(`http://localhost:8090/uvmgmt/vehicles/user/${userId}`).subscribe({
+    this.http.get<any>(`https://myapp-service-s92w.onrender.com/uvmgmt/vehicles/user/${userId}`).subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         this.vehicles = Array.isArray(data) ? data : [];
@@ -63,7 +63,7 @@ export class VehicleListComponent implements OnInit {
 
   delete(id: number): void {
     if (!confirm('Delete this vehicle?')) return;
-    this.http.delete(`http://localhost:8090/uvmgmt/vehicles/${id}`).subscribe({
+    this.http.delete(`https://myapp-service-s92w.onrender.com/uvmgmt/vehicles/${id}`).subscribe({
       next: () => {
         this.vehicles   = this.vehicles.filter(v => v.id !== id);
         this.successMsg = 'Vehicle deleted.';

@@ -15,7 +15,7 @@ export interface Vehicle {
 
 @Injectable({ providedIn: 'root' })
 export class VehicleService {
-  private readonly base = 'http://localhost:8090/uvmgmt/vehicles';
+  private readonly base = 'https://myapp-service-s92w.onrender.com/uvmgmt/vehicles';
 
   constructor(private http: HttpClient) {}
 

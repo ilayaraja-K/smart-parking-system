@@ -32,7 +32,7 @@ export class AdminUsersComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.cdr.detectChanges();
-    this.http.get<any>('http://localhost:8090/uvmgmt/users').subscribe({
+    this.http.get<any>('https://myapp-service-s92w.onrender.com/uvmgmt/users').subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         this.users   = Array.isArray(data) ? data : [];
@@ -61,7 +61,7 @@ export class AdminUsersComponent implements OnInit {
     }
     this.vehiclesLoading = true;
     this.cdr.detectChanges();
-    this.http.get<any>(`http://localhost:8090/uvmgmt/vehicles/user/${userId}`).subscribe({
+    this.http.get<any>(`https://myapp-service-s92w.onrender.com/uvmgmt/vehicles/user/${userId}`).subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         this.vehiclesMap[userId] = Array.isArray(data) ? data : [];

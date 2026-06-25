@@ -48,7 +48,7 @@ export class AdminSlotsComponent implements OnInit {
   loadOverview(): void {
     this.overviewLoading = true;
     this.cdr.detectChanges();
-    this.http.get<any>('http://localhost:8091/pabsm/buildings').subscribe({
+    this.http.get<any>('https://parking-service-un8u.onrender.com/pabsm/buildings').subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         this.buildings = Array.isArray(data) ? data : [];
@@ -61,7 +61,7 @@ export class AdminSlotsComponent implements OnInit {
         // Load slots for each building
         this.buildingSlots.forEach((row, i) => {
           const id = row.building.buildingId ?? row.building.id;
-          this.http.get<any>(`http://localhost:8091/pabsm/slots/building/${id}`).subscribe({
+          this.http.get<any>(`https://parking-service-un8u.onrender.com/pabsm/slots/building/${id}`).subscribe({
             next: (r) => {
               const d = r?.appResponse ?? r;
               this.buildingSlots[i].slots   = Array.isArray(d) ? d : [];
@@ -91,7 +91,7 @@ export class AdminSlotsComponent implements OnInit {
     }
     if (!confirm(`Delete slot "${slot.slotNumber}"? This cannot be undone.`)) return;
     const slotId = slot.slotId ?? slot.id;
-    this.http.delete<any>(`http://localhost:8091/pabsm/slots/${slotId}`).subscribe({
+    this.http.delete<any>(`https://parking-service-un8u.onrender.com/pabsm/slots/${slotId}`).subscribe({
       next: () => {
         row.slots = row.slots.filter(s => (s.slotId ?? s.id) !== slotId);
         this.successMsg = `Slot "${slot.slotNumber}" deleted.`;
@@ -124,7 +124,7 @@ export class AdminSlotsComponent implements OnInit {
     this.formLoading = true;
     this.errorMsg = '';
     this.cdr.detectChanges();
-    this.http.post<any>('http://localhost:8091/pabsm/slots', this.slotForm.value).subscribe({
+    this.http.post<any>('https://parking-service-un8u.onrender.com/pabsm/slots', this.slotForm.value).subscribe({
       next: (res) => {
         const slot = res?.appResponse ?? res;
         this.formLoading = false;

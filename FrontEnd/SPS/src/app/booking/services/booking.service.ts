@@ -39,7 +39,7 @@ function unwrap<T>(res: any): T {
 
 @Injectable({ providedIn: 'root' })
 export class BookingService {
-  private readonly base = 'http://localhost:8091/pabsm';
+  private readonly base = 'https://parking-service-un8u.onrender.com/pabsm';
 
   constructor(private http: HttpClient) {}
 

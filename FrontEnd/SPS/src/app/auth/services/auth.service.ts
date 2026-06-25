@@ -37,8 +37,8 @@ function extractRole(payload: Record<string, unknown>, resRole?: string): 'admin
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly loginUrl    = 'http://localhost:8090/uvmgmt/users/login';
-  private readonly registerUrl = 'http://localhost:8090/uvmgmt/users/register';
+  private readonly loginUrl    = 'https://myapp-service-s92w.onrender.com/uvmgmt/users/login';
+  private readonly registerUrl = 'https://myapp-service-s92w.onrender.com/uvmgmt/users/register';
   private readonly storageKey  = 'sps_user';
   private readonly isBrowser   = isPlatformBrowser(inject(PLATFORM_ID));
 

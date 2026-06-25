@@ -29,7 +29,7 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     // Load buildings
-    this.http.get<any>('http://localhost:8091/pabsm/buildings').subscribe({
+    this.http.get<any>('https://parking-service-un8u.onrender.com/pabsm/buildings').subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         this.buildings = Array.isArray(data) ? data : [];
@@ -39,7 +39,7 @@ export class AdminDashboardComponent implements OnInit {
     });
 
     // Load all bookings
-    this.http.get<any>('http://localhost:8091/pabsm/bookings').subscribe({
+    this.http.get<any>('https://parking-service-un8u.onrender.com/pabsm/bookings').subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         this.allBookings    = Array.isArray(data) ? data : [];
@@ -54,7 +54,7 @@ export class AdminDashboardComponent implements OnInit {
     });
 
     // Load users
-    this.http.get<any>('http://localhost:8090/uvmgmt/users').subscribe({
+    this.http.get<any>('https://myapp-service-s92w.onrender.com/uvmgmt/users').subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         this.users      = Array.isArray(data) ? data : [];

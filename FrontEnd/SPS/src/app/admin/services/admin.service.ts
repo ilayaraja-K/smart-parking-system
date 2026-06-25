@@ -18,8 +18,8 @@ function unwrap<T>(res: any): T {
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
-  private readonly pabsm  = 'http://localhost:8091/pabsm';
-  private readonly uvmgmt = 'http://localhost:8090/uvmgmt';
+  private readonly pabsm  = 'https://parking-service-un8u.onrender.com/pabsm';
+  private readonly uvmgmt = 'https://myapp-service-s92w.onrender.com/uvmgmt';
 
   constructor(private http: HttpClient) {}
 

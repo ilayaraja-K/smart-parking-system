@@ -35,7 +35,7 @@ export class BookingListComponent implements OnInit {
     this.cdr.detectChanges();
 
     // Load buildings for name lookup
-    this.http.get<any>('http://localhost:8091/pabsm/buildings').subscribe({
+    this.http.get<any>('https://parking-service-un8u.onrender.com/pabsm/buildings').subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         this.buildings = Array.isArray(data) ? data : [];
@@ -43,7 +43,7 @@ export class BookingListComponent implements OnInit {
       }
     });
 
-    this.http.get<any>(`http://localhost:8091/pabsm/users/${userId}/bookings`).subscribe({
+    this.http.get<any>(`https://parking-service-un8u.onrender.com/pabsm/users/${userId}/bookings`).subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
         this.bookings = Array.isArray(data) ? data : [];
@@ -87,7 +87,7 @@ export class BookingListComponent implements OnInit {
   }
 
   complete(id: number): void {
-    this.http.put<any>(`http://localhost:8091/pabsm/bookings/${id}/complete`, {}).subscribe({
+    this.http.put<any>(`https://parking-service-un8u.onrender.com/pabsm/bookings/${id}/complete`, {}).subscribe({
       next: (res) => {
         const updated = res?.appResponse ?? res;
         const i = this.bookings.findIndex(b => b.id === id);
@@ -100,7 +100,7 @@ export class BookingListComponent implements OnInit {
 
   cancel(id: number): void {
     if (!confirm('Cancel this booking?')) return;
-    this.http.delete<any>(`http://localhost:8091/pabsm/bookings/${id}`).subscribe({
+    this.http.delete<any>(`https://parking-service-un8u.onrender.com/pabsm/bookings/${id}`).subscribe({
       next: () => { this.bookings = this.bookings.filter(b => b.id !== id); this.cdr.detectChanges(); },
       error: () => { this.errorMsg = 'Failed to cancel booking.'; this.cdr.detectChanges(); }
     });
