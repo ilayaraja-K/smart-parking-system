@@ -51,7 +51,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
 
                 // ✅ PUBLIC APIs
-                .requestMatchers("/uvmgmt/users/register", "/uvmgmt/users/login").permitAll()
+                .requestMatchers("/uvmgmt/users/register", "/uvmgmt/users/login","/uvmgmt/users/ping").permitAll()
 
                 // 🔐 ADMIN APIs
                 .requestMatchers("/uvmgmt/users").hasRole("ADMIN")
