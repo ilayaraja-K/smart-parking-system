@@ -221,7 +221,6 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new CustomException("User not found"));
 
         user.setName(updatedUser.getName());
-        user.setEmail(updatedUser.getEmail());
 
         if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));

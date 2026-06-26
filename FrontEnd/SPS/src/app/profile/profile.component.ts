@@ -105,11 +105,13 @@ export class ProfileComponent implements OnInit {
     this.successMsg = '';
     this.errorMsg   = '';
 
-    const body: any = { name: this.form.name, email: this.form.email };
-    if (this.form.password?.trim()) {
-      body.password = this.form.password.trim();
-    }
+const body: any = {
+  name: this.form.name
+};
 
+if (this.form.password?.trim()) {
+  body.password = this.form.password.trim();
+}
     this.http.put<any>(`https://myapp-service-s92w.onrender.com/uvmgmt/users/${this.userId}`, body).subscribe({
       next: (res) => {
         const data = res?.appResponse ?? res;
