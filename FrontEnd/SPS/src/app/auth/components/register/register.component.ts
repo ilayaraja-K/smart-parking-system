@@ -13,7 +13,8 @@ import { AuthService } from '../../services/auth.service';
 export class RegisterComponent {
   registerForm: FormGroup;
   errorMsg = '';
-  loading = false;
+successMsg = '';
+loading = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
@@ -30,17 +31,41 @@ export class RegisterComponent {
     return p === cp ? null : { passwordMismatch: true };
   }
 
-  onSubmit(): void {
-    if (this.registerForm.invalid) return;
-    this.loading = true;
-    this.errorMsg = '';
-    const { name, email, password } = this.registerForm.value;
-    this.authService.register(name, email, password).subscribe({
-      next: () => { this.loading = false; this.router.navigate(['/dashboard']); },
-      error: (err) => {
-        this.loading = false;
-        this.errorMsg = err?.error?.message || 'Registration failed. Please try again.';
-      }
-    });
-  }
+onSubmit(): void {
+
+  if (this.registerForm.invalid) return;
+
+  this.loading = true;
+  this.errorMsg = '';
+  this.successMsg = '';
+
+  const { name, email, password } = this.registerForm.value;
+
+  this.authService.register(name, email, password).subscribe({
+
+    next: () => {
+
+      this.loading = false;
+
+      this.successMsg = 'Email registered successfully. Redirecting to Login...';
+
+      setTimeout(() => {
+        this.router.navigate(['/auth/login']);
+      }, 1500);
+
+    },
+
+    error: (err) => {
+
+      this.loading = false;
+
+      this.errorMsg =
+        err?.error?.appResponse ??
+        'Registration failed. Please try again.';
+
+    }
+
+  });
+
+}
 }

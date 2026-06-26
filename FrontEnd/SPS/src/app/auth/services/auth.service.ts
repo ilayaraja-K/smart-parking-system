@@ -102,29 +102,13 @@ export class AuthService {
     );
   }
 
-  register(name: string, email: string, password: string): Observable<AuthUser> {
-    return this.http.post<any>(this.registerUrl, { name, email, password }).pipe(
-      map(res => {
-        const token: string = res?.appResponse?.token ?? res?.token ?? '';
-        if (!token) throw new Error('No token received from server');
-
-        const payload = decodeJwtPayload(token);
-        const user: AuthUser = {
-          id:    extractUserId(payload),
-          name:  (payload['name'] as string) ?? name,
-          email: (payload['sub'] as string) ?? email,
-          role:  extractRole(payload),
-          token
-        };
-        return user;
-      }),
-      tap(user => {
-        if (this.isBrowser) localStorage.setItem(this.storageKey, JSON.stringify(user));
-        this._user$.next(user);
-      })
-    );
-  }
-
+register(name: string, email: string, password: string): Observable<any> {
+  return this.http.post(this.registerUrl, {
+    name,
+    email,
+    password
+  });
+}
   logout(): void {
     if (this.isBrowser) localStorage.removeItem(this.storageKey);
     this._user$.next(null);

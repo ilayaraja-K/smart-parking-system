@@ -8,6 +8,9 @@
       </div>
 
       <div *ngIf="errorMsg" class="alert alert-danger py-2">{{ errorMsg }}</div>
+      <div *ngIf="successMsg" class="alert alert-success py-2">
+  {{ successMsg }}
+</div>
 
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
